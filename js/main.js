@@ -702,6 +702,7 @@ function isFacebookUrl(url) {
         /^(https?:\/\/)?(www\.|m\.|web\.|mbasic\.)?facebook\.com\/.*\/posts\/[\w-]+/i,
     ];
     
+
     return patterns.some(pattern => pattern.test(url));
 }
 
