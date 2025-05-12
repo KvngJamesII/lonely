@@ -1,0 +1,76 @@
+{
+  "name": "SaveFBVideos - Facebook Video Downloader",
+  "short_name": "SaveFBVideos",
+  "description": "Download Facebook videos in HD or SD quality easily",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "48x48 72x72 96x96 128x128 256x256",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/pwa-icon-192.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/pwa-icon-512.svg",
+      "type": "image/svg+xml",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/maskable-icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "196x196",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "assets/screenshot1.svg",
+      "sizes": "1280x720",
+      "type": "image/svg+xml",
+      "platform": "wide",
+      "label": "SaveFBVideos Homepage"
+    },
+    {
+      "src": "assets/screenshot2.svg",
+      "sizes": "1280x720",
+      "type": "image/svg+xml",
+      "platform": "wide",
+      "label": "Download Facebook Videos"
+    }
+  ],
+  "related_applications": [
+    {
+      "platform": "web",
+      "url": "https://savefbvideos.com"
+    }
+  ],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Download Video",
+      "short_name": "Download",
+      "description": "Start downloading a video",
+      "url": "/index.html",
+      "icons": [
+        {
+          "src": "assets/favicon.svg",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "categories": ["utilities", "social"],
+  "lang": "en-US",
+  "dir": "ltr"
+}

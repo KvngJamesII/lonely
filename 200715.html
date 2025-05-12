@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - SaveFBVideos</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    
+    <!-- Prevents indexing -->
+    <meta name="robots" content="noindex, nofollow">
+</head>
+<body class="admin-page light-mode">
+    <div class="admin-container" id="loginContainer">
+        <div class="admin-card">
+            <div class="admin-logo">
+                <img src="assets/logo.svg" alt="SaveFBVideos Logo">
+                <h1>Admin Panel</h1>
+            </div>
+            <div class="login-form">
+                <div class="input-group">
+                    <label for="adminPassword">Admin Password</label>
+                    <input type="password" id="adminPassword" placeholder="Enter password">
+                    <div class="error-message" id="loginError"></div>
+                </div>
+                <button id="loginBtn" class="primary-btn">Login</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-dashboard hidden" id="dashboardContainer">
+        <header class="admin-header">
+            <div class="admin-header-content">
+                <div class="admin-logo">
+                    <img src="assets/logo.svg" alt="SaveFBVideos Logo">
+                    <h1>Admin Dashboard</h1>
+                </div>
+                <div class="admin-actions">
+                    <button id="adminThemeToggle" aria-label="Toggle Dark Mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button id="logoutBtn" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="admin-main">
+            <div class="admin-sidebar">
+                <nav class="admin-nav">
+                    <ul>
+                        <li class="active" data-tab="overview">
+                            <i class="fas fa-chart-line"></i> Overview
+                        </li>
+                        <li data-tab="users">
+                            <i class="fas fa-users"></i> Users
+                        </li>
+                        <li data-tab="downloads">
+                            <i class="fas fa-download"></i> Downloads
+                        </li>
+                        <li data-tab="settings">
+                            <i class="fas fa-cog"></i> Settings
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <div class="admin-content">
+                <!-- Overview Tab -->
+                <div class="admin-tab active" id="overview">
+                    <h2>Dashboard Overview</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Total Users</h3>
+                                <p id="totalUsers">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-download"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Total Downloads</h3>
+                                <p id="totalDownloads">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Page Views</h3>
+                                <p id="pageViews">0</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-globe"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3>Active Countries</h3>
+                                <p id="activeCountries">0</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-containers">
+                        <div class="chart-card">
+                            <h3>Download Trends</h3>
+                            <div class="chart-placeholder">
+                                <div class="chart-bars">
+                                    <div class="chart-bar" style="height: 60%;" data-label="Mon"></div>
+                                    <div class="chart-bar" style="height: 80%;" data-label="Tue"></div>
+                                    <div class="chart-bar" style="height: 40%;" data-label="Wed"></div>
+                                    <div class="chart-bar" style="height: 70%;" data-label="Thu"></div>
+                                    <div class="chart-bar" style="height: 90%;" data-label="Fri"></div>
+                                    <div class="chart-bar" style="height: 50%;" data-label="Sat"></div>
+                                    <div class="chart-bar" style="height: 30%;" data-label="Sun"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chart-card">
+                            <h3>Device Distribution</h3>
+                            <div class="chart-placeholder pie-chart">
+                                <div class="pie-segments">
+                                    <div class="pie-segment" style="--percentage: 55%; --color: #3b82f6;" data-label="Mobile"></div>
+                                    <div class="pie-segment" style="--percentage: 30%; --color: #10b981;" data-label="Desktop"></div>
+                                    <div class="pie-segment" style="--percentage: 15%; --color: #f59e0b;" data-label="Tablet"></div>
+                                </div>
+                                <div class="pie-legend">
+                                    <div class="legend-item">
+                                        <span class="color-dot" style="background-color: #3b82f6;"></span>
+                                        <span>Mobile: 55%</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="color-dot" style="background-color: #10b981;"></span>
+                                        <span>Desktop: 30%</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="color-dot" style="background-color: #f59e0b;"></span>
+                                        <span>Tablet: 15%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Tab -->
+                <div class="admin-tab" id="users">
+                    <h2>User Statistics</h2>
+                    <div class="user-stats">
+                        <div class="stats-card">
+                            <h3>New Users (Last 7 Days)</h3>
+                            <div class="stats-value">124</div>
+                            <div class="stats-change positive">
+                                <i class="fas fa-arrow-up"></i> 12%
+                            </div>
+                        </div>
+                        <div class="stats-card">
+                            <h3>Returning Users</h3>
+                            <div class="stats-value">68%</div>
+                            <div class="stats-change positive">
+                                <i class="fas fa-arrow-up"></i> 5%
+                            </div>
+                        </div>
+                        <div class="stats-card">
+                            <h3>Avg. Session Duration</h3>
+                            <div class="stats-value">4m 32s</div>
+                            <div class="stats-change negative">
+                                <i class="fas fa-arrow-down"></i> 2%
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <h3>Top Countries</h3>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Country</th>
+                                    <th>Users</th>
+                                    <th>Downloads</th>
+                                    <th>Conversion Rate</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>United States</td>
+                                    <td>1,245</td>
+                                    <td>3,567</td>
+                                    <td>78%</td>
+                                </tr>
+                                <tr>
+                                    <td>India</td>
+                                    <td>982</td>
+                                    <td>2,431</td>
+                                    <td>72%</td>
+                                </tr>
+                                <tr>
+                                    <td>United Kingdom</td>
+                                    <td>645</td>
+                                    <td>1,876</td>
+                                    <td>81%</td>
+                                </tr>
+                                <tr>
+                                    <td>Brazil</td>
+                                    <td>521</td>
+                                    <td>1,234</td>
+                                    <td>65%</td>
+                                </tr>
+                                <tr>
+                                    <td>Germany</td>
+                                    <td>423</td>
+                                    <td>987</td>
+                                    <td>74%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Downloads Tab -->
+                <div class="admin-tab" id="downloads">
+                    <h2>Download Statistics</h2>
+                    <div class="download-stats">
+                        <div class="stats-card">
+                            <h3>Today's Downloads</h3>
+                            <div class="stats-value">243</div>
+                            <div class="stats-change positive">
+                                <i class="fas fa-arrow-up"></i> 18%
+                            </div>
+                        </div>
+                        <div class="stats-card">
+                            <h3>HD Quality</h3>
+                            <div class="stats-value">72%</div>
+                            <div class="stats-change positive">
+                                <i class="fas fa-arrow-up"></i> 8%
+                            </div>
+                        </div>
+                        <div class="stats-card">
+                            <h3>SD Quality</h3>
+                            <div class="stats-value">28%</div>
+                            <div class="stats-change negative">
+                                <i class="fas fa-arrow-down"></i> 8%
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <h3>Recent Downloads</h3>
+                        <table class="data-table" id="recentDownloadsTable">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Video Title</th>
+                                    <th>Quality</th>
+                                    <th>User Location</th>
+                                </tr>
+                            </thead>
+                            <tbody id="downloadsTableBody">
+                                <!-- Will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div class="admin-tab" id="settings">
+                    <h2>Admin Settings</h2>
+                    <div class="settings-form">
+                        <div class="setting-group">
+                            <h3>General Settings</h3>
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <label for="siteName">Site Name</label>
+                                </div>
+                                <div class="setting-control">
+                                    <input type="text" id="siteName" value="SaveFBVideos">
+                                </div>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <label for="siteDescription">Site Description</label>
+                                </div>
+                                <div class="setting-control">
+                                    <textarea id="siteDescription">Download Facebook videos easily with SaveFBVideos. Fast, free, and no registration required.</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="setting-group">
+                            <h3>API Settings</h3>
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <label for="apiEndpoint">API Endpoint</label>
+                                </div>
+                                <div class="setting-control">
+                                    <input type="text" id="apiEndpoint" value="https://apis.davidcyriltech.my.id/facebook2">
+                                </div>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <label for="apiTimeout">API Timeout (seconds)</label>
+                                </div>
+                                <div class="setting-control">
+                                    <input type="number" id="apiTimeout" value="30">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="setting-group">
+                            <h3>Display Settings</h3>
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <label>Default Theme</label>
+                                </div>
+                                <div class="setting-control toggle-group">
+                                    <label class="toggle-btn">
+                                        <input type="radio" name="defaultTheme" value="light" checked>
+                                        <span>Light</span>
+                                    </label>
+                                    <label class="toggle-btn">
+                                        <input type="radio" name="defaultTheme" value="dark">
+                                        <span>Dark</span>
+                                    </label>
+                                    <label class="toggle-btn">
+                                        <input type="radio" name="defaultTheme" value="system">
+                                        <span>System</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <label for="defaultLanguage">Default Language</label>
+                                </div>
+                                <div class="setting-control">
+                                    <select id="defaultLanguage">
+                                        <option value="en">English</option>
+                                        <option value="es">Español</option>
+                                        <option value="fr">Français</option>
+                                        <option value="de">Deutsch</option>
+                                        <option value="pt">Português</option>
+                                        <option value="it">Italiano</option>
+                                        <option value="ar">العربية</option>
+                                        <option value="hi">हिन्दी</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="settings-actions">
+                            <button id="saveSettingsBtn" class="primary-btn">Save Settings</button>
+                            <button id="resetSettingsBtn" class="secondary-btn">Reset to Defaults</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="js/utils.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaveFBVideos - Download Facebook Videos Easily</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Download Facebook videos in HD and SD quality for free. SaveFBVideos is the fastest and easiest way to save videos from Facebook.">
+    <meta name="keywords" content="facebook video downloader, download facebook videos, save facebook videos, facebook video saver">
+    <meta name="author" content="SaveFBVideos">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://savefbvideos.com/">
+    <meta property="og:title" content="SaveFBVideos - Download Facebook Videos Easily">
+    <meta property="og:description" content="Download Facebook videos in HD and SD quality for free. SaveFBVideos is the fastest and easiest way to save videos from Facebook.">
+    <meta property="og:image" content="https://savefbvideos.com/assets/og-image.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://savefbvideos.com/">
+    <meta property="twitter:title" content="SaveFBVideos - Download Facebook Videos Easily">
+    <meta property="twitter:description" content="Download Facebook videos in HD and SD quality for free. SaveFBVideos is the fastest and easiest way to save videos from Facebook.">
+    <meta property="twitter:image" content="https://savefbvideos.com/assets/og-image.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://savefbvideos.com/">
+    
+    <!-- Schema.org markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "SaveFBVideos",
+      "url": "https://savefbvideos.com/",
+      "description": "Download Facebook videos in HD and SD quality for free",
+      "applicationCategory": "Utility",
+      "operatingSystem": "Web Browser",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#3b82f6">
+</head>
+<body class="light-mode">
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <img src="assets/logo.svg" alt="SaveFBVideos Logo">
+                </div>
+                <div class="actions">
+                    <button id="languageToggle" aria-label="Change Language">
+                        <i class="fas fa-globe"></i>
+                        <span>EN</span>
+                    </button>
+                    <button id="themeToggle" aria-label="Toggle Dark Mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <div class="wave-background">
+                    <img src="assets/wave.svg" alt="" aria-hidden="true">
+                </div>
+                <div class="hero-content">
+                    <h1 data-lang="heroTitle">Download Facebook Videos Easily</h1>
+                    <p data-lang="heroSubtitle">Save any Facebook video in HD or SD quality with just a few clicks</p>
+                    
+                    <div class="url-input-container">
+                        <div class="input-wrapper">
+                            <input type="text" id="videoUrl" placeholder="Paste Facebook video URL here" data-lang="inputPlaceholder">
+                            <button id="pasteBtn" aria-label="Paste from clipboard">
+                                <i class="fas fa-paste"></i>
+                            </button>
+                            <button id="clearBtn" aria-label="Clear input">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <button id="fetchBtn" class="primary-btn">
+                            <i class="fas fa-download"></i> Download
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="resultSection" class="hidden">
+            <div class="container">
+                <div class="loading-container" id="loadingContainer">
+                    <div class="loading-spinner"></div>
+                    <p>Loading Video</p>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                </div>
+                
+                <div class="result-container" id="resultContainer">
+                    <div class="video-info">
+                        <div class="thumbnail-container">
+                            <img id="videoThumbnail" src="" alt="Video Thumbnail">
+                            <span class="video-badge">FB</span>
+                        </div>
+                        <div class="video-details">
+                            <h2 id="videoTitle"></h2>
+                            <div class="download-options">
+                                <h3 data-lang="downloadOptions">Download Options:</h3>
+                                <div class="download-buttons">
+                                    <a id="downloadSD" href="#" class="download-btn">
+                                        <i class="fas fa-download"></i> 
+                                        <span>Download SD</span>
+                                    </a>
+                                    <a id="downloadHD" href="#" class="download-btn">
+                                        <i class="fas fa-download"></i> 
+                                        <span>Download HD</span>
+                                    </a>
+                                    <button id="downloadMP3" class="download-btn disabled">
+                                        <i class="fas fa-music"></i> 
+                                        <span>Download MP3</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="error-container" id="errorContainer">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <h3 data-lang="errorTitle">Something went wrong</h3>
+                    <p id="errorMessage"></p>
+                    <button class="primary-btn retry-btn" id="retryBtn" data-lang="retryButton">Try Again</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <h2 data-lang="featuresTitle">Why Choose SaveFBVideos?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3 data-lang="featureSpeed">Fast & Free</h3>
+                        <p data-lang="featureSpeedDesc">Download Facebook videos instantly without registration or fees</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 data-lang="featureSecurity">Secure</h3>
+                        <p data-lang="featureSecurityDesc">Your data stays private - we don't store your videos or information</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3 data-lang="featureMobile">Mobile Friendly</h3>
+                        <p data-lang="featureMobileDesc">Works perfectly on all devices - desktop, tablet, and mobile</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3 data-lang="featureQuality">High Quality</h3>
+                        <p data-lang="featureQualityDesc">Download videos in SD or HD quality without losing resolution</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="how-it-works">
+            <div class="container">
+                <h2 data-lang="howWorksTitle">How It Works</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3 data-lang="step1Title">Copy URL</h3>
+                        <p data-lang="step1Desc">Copy the Facebook video URL you want to download</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3 data-lang="step2Title">Paste & Fetch</h3>
+                        <p data-lang="step2Desc">Paste the URL in the input field and click Download</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3 data-lang="step3Title">Download</h3>
+                        <p data-lang="step3Desc">Choose your preferred quality and download the video</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="history-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 data-lang="historyTitle">Recent Downloads</h2>
+                    <button id="clearHistoryBtn" class="text-btn" data-lang="clearHistory">Clear History</button>
+                </div>
+                <div id="historyContainer" class="history-container">
+                    <div class="empty-history" id="emptyHistory">
+                        <i class="fas fa-history"></i>
+                        <p data-lang="noHistory">Your download history will appear here</p>
+                    </div>
+                    <div id="historyItems" class="history-items"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="languageModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 data-lang="languageModalTitle">Select Language</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="language-options">
+                    <button class="language-option" data-lang-code="en">
+                        <span class="lang-flag">🇺🇸</span>
+                        <span class="lang-name">English</span>
+                    </button>
+                    <button class="language-option" data-lang-code="es">
+                        <span class="lang-flag">🇪🇸</span>
+                        <span class="lang-name">Español</span>
+                    </button>
+                    <button class="language-option" data-lang-code="fr">
+                        <span class="lang-flag">🇫🇷</span>
+                        <span class="lang-name">Français</span>
+                    </button>
+                    <button class="language-option" data-lang-code="de">
+                        <span class="lang-flag">🇩🇪</span>
+                        <span class="lang-name">Deutsch</span>
+                    </button>
+                    <button class="language-option" data-lang-code="pt">
+                        <span class="lang-flag">🇵🇹</span>
+                        <span class="lang-name">Português</span>
+                    </button>
+                    <button class="language-option" data-lang-code="it">
+                        <span class="lang-flag">🇮🇹</span>
+                        <span class="lang-name">Italiano</span>
+                    </button>
+                    <button class="language-option" data-lang-code="ar">
+                        <span class="lang-flag">🇦🇪</span>
+                        <span class="lang-name">العربية</span>
+                    </button>
+                    <button class="language-option" data-lang-code="hi">
+                        <span class="lang-flag">🇮🇳</span>
+                        <span class="lang-name">हिन्दी</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="assets/logo.svg" alt="SaveFBVideos Logo">
+                    <p data-lang="footerTagline">The easiest way to download Facebook videos</p>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4 data-lang="linkGroupTools">Tools</h4>
+                        <ul>
+                            <li><a href="#" data-lang="linkFbDownloader">Facebook Downloader</a></li>
+                            <li><a href="#" data-lang="linkInstaDownloader">Instagram Downloader</a></li>
+                            <li><a href="#" data-lang="linkTwitterDownloader">Twitter Downloader</a></li>
+                            <li><a href="#" data-lang="linkYoutubeDownloader">YouTube Downloader</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h4 data-lang="linkGroupCompany">Company</h4>
+                        <ul>
+                            <li><a href="#" data-lang="linkAbout">About Us</a></li>
+                            <li><a href="#" data-lang="linkPrivacy">Privacy Policy</a></li>
+                            <li><a href="#" data-lang="linkTerms">Terms of Service</a></li>
+                            <li><a href="#" data-lang="linkContact">Contact Us</a></li>
+                        </ul>
+                    </div>
+                    <div class="link-group">
+                        <h4 data-lang="linkGroupConnect">Connect</h4>
+                        <div class="social-icons">
+                            <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        </div>
+                        <div class="app-links">
+                            <a href="#" class="app-link" data-lang="linkBrowserExt">Browser Extension</a>
+                            <a href="#" class="app-link" data-lang="linkMobileApp">Mobile App</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p data-lang="copyright">© 2023 SaveFBVideos. All rights reserved.</p>
+                <p data-lang="disclaimer">SaveFBVideos is not affiliated with Facebook.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Files -->
+    <script src="js/utils.js"></script>
+    <script src="js/languages.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
