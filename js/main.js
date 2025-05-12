@@ -273,60 +273,36 @@ async function fetchVideoData(url) {
         
         console.log('Valid Facebook URL detected:', url);
         
-        // Add a timeout and better error handling to the fetch request
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
-        
-        console.log(`Making API request to: ${API_URL}?url=${encodeURIComponent(url)}`);
-        
+        // Make real API request
         const response = await fetch(`${API_URL}?url=${encodeURIComponent(url)}`, {
-            signal: controller.signal,
             method: 'GET',
             headers: {
                 'Accept': 'application/json'
             }
-        }).catch(error => {
-            console.error('Fetch error:', error);
-            if (error.name === 'AbortError') {
-                throw new Error('Request timed out. Please try again.');
-            }
-            throw error;
         });
-        
-        // Clear the timeout
-        clearTimeout(timeoutId);
-        
+
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        
-        let data;
-        try {
-            data = await response.json();
-            console.log('API Response:', data);
-            
-            if (!data || !data.status) {
-                throw new Error(data.message || 'Failed to fetch video data');
-            }
-            
-            if (!data.video || !data.video.downloads || data.video.downloads.length === 0) {
-                throw new Error('No download options available for this video');
-            }
-        } catch (jsonError) {
-            console.error('Error parsing JSON response:', jsonError);
-            throw new Error('Invalid response from server. Please try again.');
+
+        const responseData = await response.json();
+        console.log('Video data:', responseData);
+
+        if (!responseData || !responseData.status) {
+            throw new Error(responseData.message || 'Failed to fetch video data');
         }
-        
+
         completeLoading();
-        showVideoResult(data);
+        showVideoResult(responseData);
         
         // Add to history
         addToHistory({
             url: url,
-            title: data.video.title || 'Untitled Video',
-            thumbnail: data.video.thumbnail || '',
+            title: responseData.video.title || 'Untitled Video',
+            thumbnail: responseData.video.thumbnail || '',
             date: new Date().toISOString()
         });
+        
         
     } catch (error) {
         console.error('Error fetching video data:', error);
@@ -558,315 +534,4 @@ function showVideoResult(data) {
                                                 }, 1000);
                                             });
                                         </script>
-                                    </div>
-                                </body>
-                                </html>
-                            `);
-                            downloadWindow.document.close();
-                        } else {
-                            // Last resort: direct navigation
-                            window.location.href = sdQuality.downloadUrl;
-                        }
-                    });
-                
-                return false;
-            };
-        } else {
-            downloadSD.removeAttribute('href');
-            downloadSD.classList.add('disabled');
-        }
-        
-        if (hdQuality && hdQuality.downloadUrl) {
-            // Simple direct approach - clear existing content and reset
-            downloadHD.innerHTML = '<i class="fas fa-download"></i> <span>Download HD</span>';
-            
-            // Set up download URL
-            downloadHD.href = hdQuality.downloadUrl;
-            downloadHD.classList.remove('disabled');
-            downloadHD.setAttribute('download', `${data.video.title || 'facebook_video'}_HD.mp4`);
-            
-            // Force download approach
-            downloadHD.onclick = function(e) {
-                e.preventDefault();
-                console.log('HD download clicked, initiating forced download');
-                
-                // Create an iframe to force download rather than preview
-                const downloadFrame = document.createElement('iframe');
-                downloadFrame.style.display = 'none';
-                document.body.appendChild(downloadFrame);
-                
-                // Use a blob URL approach with fetch to force download
-                fetch(hdQuality.downloadUrl)
-                    .then(response => response.blob())
-                    .then(blob => {
-                        const blobUrl = window.URL.createObjectURL(blob);
-                        
-                        // Create a link and click it to download
-                        const downloadLink = document.createElement('a');
-                        downloadLink.href = blobUrl;
-                        downloadLink.download = `${data.video.title || 'facebook_video'}_HD.mp4`;
-                        downloadLink.style.display = 'none';
-                        downloadFrame.contentDocument.body.appendChild(downloadLink);
-                        downloadLink.click();
-                        
-                        // Clean up
-                        setTimeout(() => {
-                            window.URL.revokeObjectURL(blobUrl);
-                            document.body.removeChild(downloadFrame);
-                            console.log('HD download completed and cleanup done');
-                        }, 1000);
-                    })
-                    .catch(err => {
-                        console.error('Download error:', err);
-                        document.body.removeChild(downloadFrame);
-                        
-                        // Fallback method if the fetch approach fails
-                        alert('Starting download using alternative method...');
-                        
-                        // Try alternative download method
-                        const downloadWindow = window.open('', '_blank');
-                        if (downloadWindow) {
-                            downloadWindow.document.write(`
-                                <html>
-                                <head>
-                                    <title>Downloading Video...</title>
-                                    <style>
-                                        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
-                                        h2 { color: #4285f4; }
-                                        .container { max-width: 600px; margin: 0 auto; }
-                                        .download-link { 
-                                            display: block; 
-                                            margin: 20px auto; 
-                                            padding: 10px 20px; 
-                                            background: #4285f4; 
-                                            color: white; 
-                                            text-decoration: none;
-                                            border-radius: 4px;
-                                            font-weight: bold;
-                                        }
-                                    </style>
-                                </head>
-                                <body>
-                                    <div class="container">
-                                        <h2>Your Download Is Starting...</h2>
-                                        <p>If the download doesn't start automatically, click the button below.</p>
-                                        <a class="download-link" href="${hdQuality.downloadUrl}" download="${data.video.title || 'facebook_video'}_HD.mp4">Download Now</a>
-                                        <script>
-                                            // Start download automatically
-                                            document.addEventListener('DOMContentLoaded', function() {
-                                                setTimeout(function() {
-                                                    document.querySelector('.download-link').click();
-                                                }, 1000);
-                                            });
-                                        </script>
-                                    </div>
-                                </body>
-                                </html>
-                            `);
-                            downloadWindow.document.close();
-                        } else {
-                            // Last resort: direct navigation
-                            window.location.href = hdQuality.downloadUrl;
-                        }
-                    });
-                
-                return false;
-            };
-        } else {
-            downloadHD.removeAttribute('href');
-            downloadHD.classList.add('disabled');
-        }
-    } else {
-        downloadSD.removeAttribute('href');
-        downloadHD.removeAttribute('href');
-        downloadSD.classList.add('disabled');
-        downloadHD.classList.add('disabled');
-    }
-    
-    // Audio download is disabled for now (not provided by the API)
-    downloadMP3.classList.add('disabled');
-    
-    // Show the result container
-    resultContainer.classList.remove('hidden');
-    
-    // Track the view for admin stats
-    trackPageView();
-}
-
-/**
- * Shows an error message
- * @param {string} message - The error message to display
- */
-function showError(message) {
-    hideResultContainers();
-    errorMessage.textContent = message;
-    errorContainer.classList.remove('hidden');
-}
-
-/**
- * Checks if a URL is a valid Facebook video URL
- * @param {string} url - The URL to check
- * @returns {boolean} - True if valid Facebook video URL
- */
-function isFacebookUrl(url) {
-    // Check if the URL is a valid Facebook URL with a more specific pattern
-    // Handle various Facebook URL formats:
-    // - facebook.com/watch?v=ID
-    // - facebook.com/user/videos/ID
-    // - facebook.com/video.php?v=ID
-    // - facebook.com/username/videos/ID
-    // - facebook.com/share/v/ID
-    // - facebook.com/reel/ID
-    const patterns = [
-        /^(https?:\/\/)?(www\.|m\.|web\.|mbasic\.)?facebook\.com\/watch\?.*v=[\w-]+/i,
-        /^(https?:\/\/)?(www\.|m\.|web\.|mbasic\.)?facebook\.com\/.*\/videos\/[\w-]+/i,
-        /^(https?:\/\/)?(www\.|m\.|web\.|mbasic\.)?facebook\.com\/video\.php\?.*v=[\w-]+/i,
-        /^(https?:\/\/)?(www\.|m\.|web\.|mbasic\.)?facebook\.com\/share\/v\/[\w-]+/i,
-        /^(https?:\/\/)?(www\.|m\.|web\.|mbasic\.)?facebook\.com\/reel\/[\w-]+/i,
-        /^(https?:\/\/)?(www\.|m\.|web\.|mbasic\.)?facebook\.com\/.*\/posts\/[\w-]+/i,
-    ];
-    
-    return patterns.some(pattern => pattern.test(url));
-}
-
-/**
- * Toggles between light and dark theme
- */
-function toggleTheme() {
-    const body = document.body;
-    const isDarkMode = body.classList.contains('dark-mode');
-    
-    // Toggle class
-    body.classList.toggle('dark-mode');
-    
-    // Update icon
-    themeToggle.innerHTML = isDarkMode 
-        ? '<i class="fas fa-moon"></i>' 
-        : '<i class="fas fa-sun"></i>';
-    
-    // Save preference
-    localStorage.setItem(THEME_STORAGE_KEY, isDarkMode ? 'light' : 'dark');
-}
-
-/**
- * Initializes theme based on saved preference or system preference
- */
-function initTheme() {
-    const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
-    
-    if (savedTheme) {
-        // Use saved preference
-        if (savedTheme === 'dark') {
-            document.body.classList.add('dark-mode');
-            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-        }
-    } else {
-        // Use system preference
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.body.classList.add('dark-mode');
-            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-        }
-    }
-}
-
-/**
- * Sets the app language
- * @param {string} langCode - The language code to set
- */
-function setLanguage(langCode) {
-    // Save preference
-    localStorage.setItem(LANG_STORAGE_KEY, langCode);
-    
-    // Update UI language
-    updateUILanguage(langCode);
-    
-    // Update toggle button text
-    languageToggle.querySelector('span').textContent = langCode.toUpperCase();
-}
-
-/**
- * Initializes language based on saved preference or browser language
- */
-function initLanguage() {
-    const savedLang = localStorage.getItem(LANG_STORAGE_KEY);
-    
-    if (savedLang) {
-        // Use saved preference
-        updateUILanguage(savedLang);
-        languageToggle.querySelector('span').textContent = savedLang.toUpperCase();
-    } else {
-        // Use browser language or default to English
-        const browserLang = navigator.language.split('-')[0];
-        const langCode = SUPPORTED_LANGUAGES.includes(browserLang) ? browserLang : 'en';
-        setLanguage(langCode);
-    }
-}
-
-/**
- * Updates UI elements with translated text
- * @param {string} langCode - The language code to use
- */
-function updateUILanguage(langCode) {
-    // Mark active language in modal
-    languageOptions.forEach(option => {
-        if (option.getAttribute('data-lang-code') === langCode) {
-            option.classList.add('active');
-        } else {
-            option.classList.remove('active');
-        }
-    });
-    
-    // Update all translatable elements
-    document.querySelectorAll('[data-lang]').forEach(element => {
-        const key = element.getAttribute('data-lang');
-        if (key && translations[langCode] && translations[langCode][key]) {
-            element.textContent = translations[langCode][key];
-        }
-    });
-    
-    // Update placeholders
-    if (videoUrlInput && translations[langCode] && translations[langCode]['inputPlaceholder']) {
-        videoUrlInput.placeholder = translations[langCode]['inputPlaceholder'];
-    }
-    
-    // Update document direction for RTL languages
-    document.documentElement.dir = LANGUAGES_RTL.includes(langCode) ? 'rtl' : 'ltr';
-}
-
-/**
- * Gets a translated string by key
- * @param {string} key - The translation key
- * @returns {string} - The translated string or the key if not found
- */
-function getTranslation(key) {
-    const langCode = localStorage.getItem(LANG_STORAGE_KEY) || 'en';
-    return (translations[langCode] && translations[langCode][key]) || translations['en'][key] || key;
-}
-
-/**
- * Tracks page view for admin statistics
- */
-function trackPageView() {
-    try {
-        // Get current count
-        let viewCount = parseInt(localStorage.getItem('fbVideoPageViews') || 0);
-        
-        // Increment and save
-        viewCount++;
-        localStorage.setItem('fbVideoPageViews', viewCount.toString());
-        
-        // Track download count
-        let downloadCount = parseInt(localStorage.getItem('fbVideoDownloads') || 0);
-        downloadCount++;
-        localStorage.setItem('fbVideoDownloads', downloadCount.toString());
-        
-        // Get unique visitor ID or create one
-        let visitorId = localStorage.getItem('fbVideoVisitorId');
-        if (!visitorId) {
-            visitorId = 'visitor_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-            localStorage.setItem('fbVideoVisitorId', visitorId);
-        }
-    } catch (error) {
-        console.error('Error tracking statistics:', error);
-    }
-}
+                                   
