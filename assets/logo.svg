@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="50" viewBox="0 0 200 50">
+  <style>
+    .logo-text { font: bold 24px 'Arial', sans-serif; }
+    .light-theme { fill: #3b82f6; }
+    .dark-theme { fill: #60a5fa; }
+    .highlight { fill: #ef4444; }
+  </style>
+  <g>
+    <text x="10" y="35" class="logo-text light-theme">Save</text>
+    <text x="70" y="35" class="logo-text highlight">FB</text>
+    <text x="105" y="35" class="logo-text light-theme">Videos</text>
+  </g>
+</svg>
